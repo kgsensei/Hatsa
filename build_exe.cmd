@@ -1,0 +1,1 @@
+pyinstaller --onefile "server.py" --name "server"
