@@ -1,0 +1,3 @@
+/ => ./public/index.html
+/index => ./public/index.html
+/test => ./public/index.html

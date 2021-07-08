@@ -1,0 +1,11 @@
+{
+     "serverConfig": {
+          "port": 80
+     },
+     "urlsFile": "urls.txt",
+     "variables": "variables.txt",
+     "errorPages": {
+          "404": "./public/404.html",
+          "500": "./public/500.html"
+     }
+}
