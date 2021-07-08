@@ -21,6 +21,55 @@ class config:
           urlsFile=configObj["urlsFile"]
           varsFile=configObj["variables"]
 
+flaggedUrls=[
+     "cgi-bin",
+     "test-cgi",
+     "faxsurvey",
+     "htmlscript",
+     "passwd",
+     "password",
+     "webgais",
+     "websendmail",
+     "aglimpse",
+     "/wrap",
+     "info2www",
+     "dumpenv",
+     ".bat",
+     ".cmd",
+     ".vbs",
+     ".vb",
+     ".pw1",
+     ".cgi",
+     ".dll",
+     ".pl",
+     ".asp",
+     ".exe",
+     ".vts",
+     ".sh",
+     ".htr",
+     ".htaccess",
+     "AnyForm2",
+     "Ews",
+     ".cfm",
+     "ExAir",
+     "Altavista",
+     "ls",
+     "dir",
+     "del",
+     ".bas",
+     "wget",
+     "curl",
+     "sudo",
+     "cmd",
+     "loginuse",
+     "loginpas",
+     "ftp",
+     "sftp",
+     "mode=PORT",
+     "upload_interval",
+     "next_url"
+]
+
 varsFileNew=open(config.varsFile).readlines()
 Lines=len(varsFileNew)
 cLines=0
@@ -65,7 +114,17 @@ class MyServer(BaseHTTPRequestHandler):
 
      def do_GET(self):
           try:
-               if self.path in urlList:
+               attempt=False
+               for url in flaggedUrls:
+                    if url.lower() in self.path.lower():
+                         print(Fore.RED+"---> Potential attack from "+str(self.client_address[0])+" was detected. Request information below.")
+                         self.send_response(404)
+                         self.send_header("Content-type","text/html")
+                         self.end_headers()
+                         self.wfile.write(bytes("<html><head><title>Server Error</title><style>body{background-color:black;color:white;}</style></head><body><h2>Security Error</h2><h3>You flagged our security system.</h3></body></html>","utf-8"))
+                         attempt=True
+                         break
+               if self.path in urlList and attempt==False:
                     urlsFileNew=open(config.urlsFile).readlines()
                     Lines=len(urlsFileNew)
                     cLines=0
@@ -80,10 +139,11 @@ class MyServer(BaseHTTPRequestHandler):
                               break
                          cLines=cLines+1
                else:
-                    self.send_response(404)
-                    self.send_header("Content-type","text/html")
-                    self.end_headers()
-                    self.wfile.write(bytes(self.readFile(config.pageNotFound),"utf-8"))
+                    if attempt==False:
+                         self.send_response(404)
+                         self.send_header("Content-type","text/html")
+                         self.end_headers()
+                         self.wfile.write(bytes(self.readFile(config.pageNotFound),"utf-8"))
           except Exception as e:
                print(Fore.CYAN+"---> Internal Server Error: \""+str(e)+"\"...")
                self.send_response(500)
