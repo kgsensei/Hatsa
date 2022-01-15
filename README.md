@@ -15,4 +15,4 @@ If you want to download the source code all you need to do is download it from t
 ## What can this do?
 This project is meant to give the user control over their static website. You can use variables and set up clean urls. It can't do much more than that, but its not meant to. I want this to be an easy solution to hosting your own website. No coding required.
 
-###### Copyright (c) kgsensei 2021.
+###### Copyright &copy; kgsensei 2022
